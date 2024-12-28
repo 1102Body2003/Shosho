@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ذكرياتنا</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('main-image.jpg'); /* الصورة الرئيسية */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            color: white;
+            text-align: center;
+            direction: rtl;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+        }
+        button#btn2025 {
+            display: none; /* مخفي في البداية */
+        }
+        #content {
+            display: none; /* لإخفاء المحتوى الرئيسي حتى الضغط على زر */
+            text-align: center;
+        }
+        img {
+            max-width: 90%;
+            max-height: 400px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>ذكرياتنا بين 2024 و2025</h1>
+    <button id="btn2024">2024</button>
+    <button id="btn2025">2025</button>
+
+    <!-- محتوى العرض -->
+    <div id="content">
+        <img id="displayedImage" src="" alt="عرض الصورة">
+        <audio id="voicePlayer" controls></audio>
+    </div>
+
+    <!-- أغنية الخلفية -->
+    <audio id="backgroundMusic" autoplay loop>
+        <source src="backgroundMusic.mp3" type="audio/mpeg">
+        متصفحك لا يدعم تشغيل الصوت.
+    </audio>
+
+    <script>
+        // استدعاء العناصر
+        const btn2024 = document.getElementById('btn2024');
+        const btn2025 = document.getElementById('btn2025');
+        const content = document.getElementById('content');
+        const displayedImage = document.getElementById('displayedImage');
+        const voicePlayer = document.getElementById('voicePlayer');
+        const backgroundMusic = document.getElementById('backgroundMusic');
+
+        // محتوى 2024
+        const images2024 = [
+            "photo1.jpg", "photo2.jpg", "photo3.jpg", "photo4.jpg",
+            "photo5.jpg", "photo6.jpg", "photo7.jpg", "photo8.jpg",
+            "photo9.jpg", "photo10.jpg", "photo11.jpg"
+        ]; // الصور
+        const audio2024 = "voice2024.mp3"; // الصوت المتزامن
+        let imageIndex = 0;
+
+        // مدة عرض كل صورة (39 ثانية / 11 صورة)
+        const imageDuration = 3540; // المدة بالمللي ثانية (3.54 ثانية)
+
+        // محتوى 2025
+        const image2025 = "photo2025.jpg"; // الصورة
+        const audio2025 = "voice2025.mp3"; // الصوت
+
+        // عند الضغط على زر 2024
+        btn2024.addEventListener('click', () => {
+            backgroundMusic.pause(); // إيقاف أغنية الخلفية
+            content.style.display = "block"; // إظهار منطقة العرض
+            displayedImage.src = images2024[imageIndex]; // عرض أول صورة
+            voicePlayer.src = audio2024; // تشغيل الصوت
+            voicePlayer.play();
+
+            // تغيير الصور تلقائيًا مع تقدم الصوت
+            const changeImages = setInterval(() => {
+                imageIndex++;
+                if (imageIndex < images2024.length) {
+                    displayedImage.src = images2024[imageIndex];
+                } else {
+                    clearInterval(changeImages); // إيقاف التبديل عند انتهاء الصور
+                }
+            }, imageDuration); // تبديل الصورة كل 3.54 ثانية
+
+            // إظهار زر 2025 عند انتهاء الصوت
+            voicePlayer.onended = () => {
+                btn2025.style.display = "inline-block"; // إظهار زر السنة الجديدة
+                backgroundMusic.play(); // استئناف أغنية الخلفية
+            };
+        });
+
+        // عند الضغط على زر 2025
+        btn2025.addEventListener('click', () => {
+            backgroundMusic.pause(); // إيقاف أغنية الخلفية
+            displayedImage.src = image2025; // عرض الصورة
+            voicePlayer.src = audio2025; // تشغيل الصوت
+            voicePlayer.play();
+
+            // استئناف أغنية الخلفية بعد انتهاء الصوت
+            voicePlayer.onended = () => {
+                backgroundMusic.play();
+            };
+        });
+    </script>
+</body>
+</html>
